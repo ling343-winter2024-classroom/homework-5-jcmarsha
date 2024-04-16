@@ -67,6 +67,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Homework 5_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Homework 5_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Homework 5_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<script src="Homework 5_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="Homework 5_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="Homework 5_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <script src="Homework 5_files/libs/plotly-binding-4.10.4/plotly.js"></script>
 <script src="Homework 5_files/libs/typedarray-0.1/typedarray.min.js"></script>
@@ -113,7 +116,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(logistf)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="predictive-processing-in-language-comprehension-an-examination-of-the-aan-article-contrast" class="level2">
 <h2 class="anchored" data-anchor-id="predictive-processing-in-language-comprehension-an-examination-of-the-aan-article-contrast"><strong>Predictive Processing in Language Comprehension: An Examination of the a/an Article Contrast</strong></h2>
@@ -311,20 +318,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="participant-age-statistics" class="level2">
 <h2 class="anchored" data-anchor-id="participant-age-statistics">5. Participant Age Statistics</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>age_summary <span class="ot">&lt;-</span> df_all <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Min =</span> <span class="fu">min</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Max =</span> <span class="fu">max</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming df_all$Value might be a character or factor, convert it to numeric first</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df_all<span class="sc">$</span>Value <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(df_all<span class="sc">$</span>Value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: There were 2 warnings in `summarise()`.
-The first warning was:
-ℹ In argument: `Mean = mean(Value, na.rm = TRUE)`.
-Caused by warning in `mean.default()`:
-! argument is not numeric or logical: returning NA
-ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.</code></pre>
+<pre><code>Warning: NAs introduced by coercion</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if there were any NAs introduced by conversion errors</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(df_all<span class="sc">$</span>Value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 73593</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now compute the summary statistics</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>age_summary <span class="ot">&lt;-</span> df_all <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="fu">mean</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Min =</span> <span class="fu">min</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Max =</span> <span class="fu">max</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the summary to ensure it's calculated correctly</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(age_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Mean Min Max       SD
+1 34.87179  18  71 14.08093</code></pre>
 </div>
 </div>
 <table class="table">
@@ -337,15 +356,15 @@ Caused by warning in `mean.default()`:
 <tbody>
 <tr class="odd">
 <td>Mean</td>
-<td>NA</td>
+<td>34.8717949</td>
 </tr>
 <tr class="even">
 <td>Min</td>
-<td></td>
+<td>18</td>
 </tr>
 <tr class="odd">
 <td>Max</td>
-<td>yes</td>
+<td>71</td>
 </tr>
 <tr class="even">
 <td>SD</td>
@@ -357,65 +376,368 @@ Caused by warning in `mean.default()`:
 <section id="reproduce-figure-1" class="level2">
 <h2 class="anchored" data-anchor-id="reproduce-figure-1">6. Reproduce Figure 1</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rt.s <span class="ot">&lt;-</span> df_rt </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>rgn.fix <span class="ot">&lt;-</span> rt.s<span class="sc">$</span>WordNum <span class="sc">-</span> rt.s<span class="sc">$</span>pos <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>word.num.z <span class="ot">&lt;-</span> <span class="fu">scale</span>(rt.s<span class="sc">$</span>WordNum)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>word.len <span class="ot">&lt;-</span> <span class="fu">nchar</span>(<span class="fu">as.character</span>(rt.s<span class="sc">$</span>Word))</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>Altword.len <span class="ot">&lt;-</span> <span class="fu">nchar</span>(<span class="fu">as.character</span>(rt.s<span class="sc">$</span>Alt))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># simplying by using dummy/treatment coding instead of sum coding</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 'expected' will be reference level</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#contrasts(rt.s$expect) &lt;- c(-.5,.5)</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>item.expect <span class="ot">&lt;-</span> <span class="fu">paste</span>(rt.s<span class="sc">$</span>item, rt.s<span class="sc">$</span>expect, <span class="at">sep=</span><span class="st">"."</span>)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>rt.s.filt <span class="ot">&lt;-</span> rt.s[rt.s<span class="sc">$</span>Hash <span class="sc">!=</span> <span class="st">"gyxidIf0fqXBM7nxg2K7SQ"</span> <span class="sc">&amp;</span> rt.s<span class="sc">$</span>Hash <span class="sc">!=</span> <span class="st">"f8dC3CkleTBP9lUufzUOyQ"</span>,]</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw <span class="ot">&lt;-</span> rt.s.filt <span class="sc">%&gt;%</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">4</span> <span class="sc">&amp;</span> rgn.fix <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Acc <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(rgn.fix, expect) <span class="sc">%&gt;%</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">subj =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Hash)), <span class="at">rt =</span> <span class="fu">mean</span>(RT), </span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(RT), <span class="at">stderr =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(subj)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_rt_filtered <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"rt.s.filt"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw <span class="ot">&lt;-</span> df_rt_filtered <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">4</span> <span class="sc">&amp;</span> rgn.fix <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Acc <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(rgn.fix, expect) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n=</span><span class="fu">n</span>(), </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">subj=</span><span class="fu">length</span>(<span class="fu">unique</span>(Hash)), </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">rt=</span><span class="fu">mean</span>(RT), <span class="at">sd=</span><span class="fu">sd</span>(RT), <span class="at">stderr=</span>sd<span class="sc">/</span><span class="fu">sqrt</span>(subj)) <span class="sc">%&gt;%</span>   </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'rgn.fix'. You can override using the
 `.groups` argument.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw<span class="sc">$</span>rgn <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">recode</span>(rgn.rt.raw<span class="sc">$</span>rgn.fix, <span class="st">"-3"</span><span class="ot">=</span><span class="st">"CW-3"</span>, <span class="st">"-2"</span><span class="ot">=</span><span class="st">"CW-2"</span>, <span class="st">"-1"</span><span class="ot">=</span><span class="st">"CW-1"</span>, <span class="st">"0"</span><span class="ot">=</span><span class="st">"art"</span>, <span class="st">"1"</span><span class="ot">=</span><span class="st">"n"</span>,<span class="st">"2"</span><span class="ot">=</span><span class="st">"CW+1"</span>, <span class="st">"3"</span><span class="ot">=</span><span class="st">"CW+2"</span>, <span class="st">"4"</span><span class="ot">=</span><span class="st">"CW+3"</span>))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw<span class="sc">$</span>rgn <span class="ot">&lt;-</span> <span class="fu">ordered</span>(rgn.rt.raw<span class="sc">$</span>rgn, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"CW-3"</span>, <span class="st">"CW-2"</span>, <span class="st">"CW-1"</span>, <span class="st">"art"</span>, <span class="st">"n"</span>, <span class="st">"CW+1"</span>, <span class="st">"CW+2"</span>, <span class="st">"CW+3"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw<span class="sc">$</span>rgn <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">recode</span>(rgn.rt.raw<span class="sc">$</span>rgn.fix, <span class="st">"-3"</span><span class="ot">=</span><span class="st">"CW-3"</span>, <span class="st">"-2"</span><span class="ot">=</span><span class="st">"CW-2"</span>, <span class="st">"-1"</span><span class="ot">=</span><span class="st">"CW-1"</span>, <span class="st">"0"</span><span class="ot">=</span><span class="st">"art"</span>, <span class="st">"1"</span><span class="ot">=</span><span class="st">"n"</span>,<span class="st">"2"</span><span class="ot">=</span><span class="st">"CW+1"</span>, <span class="st">"3"</span><span class="ot">=</span><span class="st">"CW+2"</span>, <span class="st">"4"</span><span class="ot">=</span><span class="st">"CW+3"</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw<span class="sc">$</span>rgn <span class="ot">&lt;-</span> <span class="fu">ordered</span>(rgn.rt.raw<span class="sc">$</span>rgn, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"CW-3"</span>, <span class="st">"CW-2"</span>, <span class="st">"CW-1"</span>, <span class="st">"art"</span>, <span class="st">"n"</span>, <span class="st">"CW+1"</span>, <span class="st">"CW+2"</span>, <span class="st">"CW+3"</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rgn.rt.raw, <span class="fu">aes</span>(<span class="at">x=</span>rgn, <span class="at">y=</span>rt, <span class="at">group=</span>expect, <span class="at">shape=</span>expect)) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="at">width=</span>.<span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="at">width=</span>.<span class="dv">3</span>), <span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> rt<span class="sc">-</span>stderr, <span class="at">ymax =</span> rt<span class="sc">+</span>stderr), <span class="at">width=</span>.<span class="dv">15</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="at">width=</span>.<span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">name=</span><span class="st">""</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Expected"</span>, <span class="st">"Unexpected"</span>), <span class="at">values =</span> <span class="fu">c</span>(<span class="dv">21</span>,<span class="dv">19</span>)) <span class="sc">+</span> </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Word"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Reading Time (msec)"</span>) <span class="sc">+</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Homework-5_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="reproduce-table-figure-1" class="level2">
+<h2 class="anchored" data-anchor-id="reproduce-table-figure-1">7. Reproduce Table (Figure 1)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming df_rt_filtered contains the data</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>df_filtered <span class="ot">&lt;-</span> df_rt_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">4</span> <span class="sc">&amp;</span> rgn.fix <span class="sc">&lt;</span> <span class="dv">5</span> <span class="sc">&amp;</span> Acc <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Group and summarize data</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>rgn_summary <span class="ot">&lt;-</span> df_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(rgn.fix, expect) <span class="sc">%&gt;%</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_rt =</span> <span class="fu">mean</span>(RT),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_rt =</span> <span class="fu">sd</span>(RT),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">stderr =</span> sd_rt <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">n</span>())</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">rgn =</span> <span class="fu">recode_factor</span>(rgn.fix, <span class="st">"-3"</span><span class="ot">=</span><span class="st">"CW-3"</span>, <span class="st">"-2"</span><span class="ot">=</span><span class="st">"CW-2"</span>, <span class="st">"-1"</span><span class="ot">=</span><span class="st">"CW-1"</span>, <span class="st">"0"</span><span class="ot">=</span><span class="st">"art"</span>, <span class="st">"1"</span><span class="ot">=</span><span class="st">"n"</span>, <span class="st">"2"</span><span class="ot">=</span><span class="st">"CW+1"</span>, <span class="st">"3"</span><span class="ot">=</span><span class="st">"CW+2"</span>, <span class="st">"4"</span><span class="ot">=</span><span class="st">"CW+3"</span>),</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">expect =</span> <span class="fu">recode_factor</span>(expect, <span class="st">"1"</span><span class="ot">=</span><span class="st">"Expected"</span>, <span class="st">"0"</span><span class="ot">=</span><span class="st">"Unexpected"</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'rgn.fix'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spread data to wide format</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rgn_wide <span class="ot">&lt;-</span> rgn_summary <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> rgn, <span class="at">value =</span> avg_rt)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rgn.fix column</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>rgn_wide <span class="ot">&lt;-</span> <span class="fu">select</span>(rgn_wide, <span class="sc">-</span>rgn.fix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Adding missing grouping variables: `rgn.fix`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a table with expected and unexpected rows</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>table_data <span class="ot">&lt;-</span> rgn_wide <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sd_rt, <span class="sc">-</span>stderr) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Condition =</span> expect,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">expect =</span> <span class="cn">NULL</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the table</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>table_formatted <span class="ot">&lt;-</span> table_data <span class="sc">%&gt;%</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Condition) <span class="sc">%&gt;%</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Table: Average Reading Time (msec) by Word Category and Condition"</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">"markdown"</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>()</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the formatted table</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>table_formatted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Table: Average Reading Time (msec) by Word Category and Condition</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">rgn.fix</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CW-3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CW-2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CW-1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">art</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">n</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CW+1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CW+2</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CW+3</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">-3</td>
+<td style="text-align: right;">753.1880</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">733.0036</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">760.2436</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">674.1306</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">704.219</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">781.0073</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">785.0631</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">766.7514</td>
+<td style="text-align: left;">expected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-3</td>
+<td style="text-align: right;">757.1725</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">742.7986</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">751.1713</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">719.3884</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1061.635</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">859.8654</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">793.6538</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">789.8782</td>
+<td style="text-align: left;">unexpected</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rt.s.filt <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Hash, expect) <span class="sc">|&gt;</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(expect) <span class="sc">|&gt;</span> </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rt.s <span class="ot">&lt;-</span> df_rt </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>rgn.fix <span class="ot">&lt;-</span> rt.s<span class="sc">$</span>WordNum <span class="sc">-</span> rt.s<span class="sc">$</span>pos <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>word.num.z <span class="ot">&lt;-</span> <span class="fu">scale</span>(rt.s<span class="sc">$</span>WordNum)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>word.len <span class="ot">&lt;-</span> <span class="fu">nchar</span>(<span class="fu">as.character</span>(rt.s<span class="sc">$</span>Word))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>Altword.len <span class="ot">&lt;-</span> <span class="fu">nchar</span>(<span class="fu">as.character</span>(rt.s<span class="sc">$</span>Alt))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># simplying by using dummy/treatment coding instead of sum coding</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 'expected' will be reference level</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#contrasts(rt.s$expect) &lt;- c(-.5,.5)</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>rt.s<span class="sc">$</span>item.expect <span class="ot">&lt;-</span> <span class="fu">paste</span>(rt.s<span class="sc">$</span>item, rt.s<span class="sc">$</span>expect, <span class="at">sep=</span><span class="st">"."</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>df_rt_filtered <span class="ot">&lt;-</span> rt.s[rt.s<span class="sc">$</span>Hash <span class="sc">!=</span> <span class="st">"gyxidIf0fqXBM7nxg2K7SQ"</span> <span class="sc">&amp;</span> rt.s<span class="sc">$</span>Hash <span class="sc">!=</span> <span class="st">"f8dC3CkleTBP9lUufzUOyQ"</span>,]</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw <span class="ot">&lt;-</span> df_rt_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">4</span> <span class="sc">&amp;</span> rgn.fix <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Acc <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(rgn.fix, expect) <span class="sc">%&gt;%</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">subj =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Hash)), <span class="at">rt =</span> <span class="fu">mean</span>(RT), </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(RT), <span class="at">stderr =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(subj)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'rgn.fix'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw<span class="sc">$</span>rgn <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">recode</span>(rgn.rt.raw<span class="sc">$</span>rgn.fix, <span class="st">"-3"</span><span class="ot">=</span><span class="st">"CW-3"</span>, <span class="st">"-2"</span><span class="ot">=</span><span class="st">"CW-2"</span>, <span class="st">"-1"</span><span class="ot">=</span><span class="st">"CW-1"</span>, <span class="st">"0"</span><span class="ot">=</span><span class="st">"art"</span>, <span class="st">"1"</span><span class="ot">=</span><span class="st">"n"</span>,<span class="st">"2"</span><span class="ot">=</span><span class="st">"CW+1"</span>, <span class="st">"3"</span><span class="ot">=</span><span class="st">"CW+2"</span>, <span class="st">"4"</span><span class="ot">=</span><span class="st">"CW+3"</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rgn.rt.raw<span class="sc">$</span>rgn <span class="ot">&lt;-</span> <span class="fu">ordered</span>(rgn.rt.raw<span class="sc">$</span>rgn, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"CW-3"</span>, <span class="st">"CW-2"</span>, <span class="st">"CW-1"</span>, <span class="st">"art"</span>, <span class="st">"n"</span>, <span class="st">"CW+1"</span>, <span class="st">"CW+2"</span>, <span class="st">"CW+3"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_rt_filtered <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Hash, expect) <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(expect) <span class="sc">|&gt;</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'Hash'. You can override using the
 `.groups` argument.</code></pre>
 </div>
 <div class="cell-output-display">
 
-<div id="wihdtmhahh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wihdtmhahh table {
+<div id="qstejlvbnp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qstejlvbnp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wihdtmhahh thead, #wihdtmhahh tbody, #wihdtmhahh tfoot, #wihdtmhahh tr, #wihdtmhahh td, #wihdtmhahh th {
+#qstejlvbnp thead, #qstejlvbnp tbody, #qstejlvbnp tfoot, #qstejlvbnp tr, #qstejlvbnp td, #qstejlvbnp th {
   border-style: none;
 }
 
-#wihdtmhahh p {
+#qstejlvbnp p {
   margin: 0;
   padding: 0;
 }
 
-#wihdtmhahh .gt_table {
+#qstejlvbnp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -441,12 +763,12 @@ Caused by warning in `mean.default()`:
   border-left-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_caption {
+#qstejlvbnp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wihdtmhahh .gt_title {
+#qstejlvbnp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -458,7 +780,7 @@ Caused by warning in `mean.default()`:
   border-bottom-width: 0;
 }
 
-#wihdtmhahh .gt_subtitle {
+#qstejlvbnp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -470,7 +792,7 @@ Caused by warning in `mean.default()`:
   border-top-width: 0;
 }
 
-#wihdtmhahh .gt_heading {
+#qstejlvbnp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -482,13 +804,13 @@ Caused by warning in `mean.default()`:
   border-right-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_bottom_border {
+#qstejlvbnp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_col_headings {
+#qstejlvbnp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -503,7 +825,7 @@ Caused by warning in `mean.default()`:
   border-right-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_col_heading {
+#qstejlvbnp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -523,7 +845,7 @@ Caused by warning in `mean.default()`:
   overflow-x: hidden;
 }
 
-#wihdtmhahh .gt_column_spanner_outer {
+#qstejlvbnp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -535,15 +857,15 @@ Caused by warning in `mean.default()`:
   padding-right: 4px;
 }
 
-#wihdtmhahh .gt_column_spanner_outer:first-child {
+#qstejlvbnp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wihdtmhahh .gt_column_spanner_outer:last-child {
+#qstejlvbnp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wihdtmhahh .gt_column_spanner {
+#qstejlvbnp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -555,11 +877,11 @@ Caused by warning in `mean.default()`:
   width: 100%;
 }
 
-#wihdtmhahh .gt_spanner_row {
+#qstejlvbnp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wihdtmhahh .gt_group_heading {
+#qstejlvbnp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -585,7 +907,7 @@ Caused by warning in `mean.default()`:
   text-align: left;
 }
 
-#wihdtmhahh .gt_empty_group_heading {
+#qstejlvbnp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -600,15 +922,15 @@ Caused by warning in `mean.default()`:
   vertical-align: middle;
 }
 
-#wihdtmhahh .gt_from_md > :first-child {
+#qstejlvbnp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wihdtmhahh .gt_from_md > :last-child {
+#qstejlvbnp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wihdtmhahh .gt_row {
+#qstejlvbnp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -627,7 +949,7 @@ Caused by warning in `mean.default()`:
   overflow-x: hidden;
 }
 
-#wihdtmhahh .gt_stub {
+#qstejlvbnp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -640,7 +962,7 @@ Caused by warning in `mean.default()`:
   padding-right: 5px;
 }
 
-#wihdtmhahh .gt_stub_row_group {
+#qstejlvbnp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -654,15 +976,15 @@ Caused by warning in `mean.default()`:
   vertical-align: top;
 }
 
-#wihdtmhahh .gt_row_group_first td {
+#qstejlvbnp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wihdtmhahh .gt_row_group_first th {
+#qstejlvbnp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wihdtmhahh .gt_summary_row {
+#qstejlvbnp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -672,16 +994,16 @@ Caused by warning in `mean.default()`:
   padding-right: 5px;
 }
 
-#wihdtmhahh .gt_first_summary_row {
+#qstejlvbnp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_first_summary_row.thick {
+#qstejlvbnp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wihdtmhahh .gt_last_summary_row {
+#qstejlvbnp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -691,7 +1013,7 @@ Caused by warning in `mean.default()`:
   border-bottom-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_grand_summary_row {
+#qstejlvbnp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -701,7 +1023,7 @@ Caused by warning in `mean.default()`:
   padding-right: 5px;
 }
 
-#wihdtmhahh .gt_first_grand_summary_row {
+#qstejlvbnp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -711,7 +1033,7 @@ Caused by warning in `mean.default()`:
   border-top-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_last_grand_summary_row_top {
+#qstejlvbnp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -721,11 +1043,11 @@ Caused by warning in `mean.default()`:
   border-bottom-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_striped {
+#qstejlvbnp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wihdtmhahh .gt_table_body {
+#qstejlvbnp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -734,7 +1056,7 @@ Caused by warning in `mean.default()`:
   border-bottom-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_footnotes {
+#qstejlvbnp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -748,7 +1070,7 @@ Caused by warning in `mean.default()`:
   border-right-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_footnote {
+#qstejlvbnp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -757,7 +1079,7 @@ Caused by warning in `mean.default()`:
   padding-right: 5px;
 }
 
-#wihdtmhahh .gt_sourcenotes {
+#qstejlvbnp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -771,7 +1093,7 @@ Caused by warning in `mean.default()`:
   border-right-color: #D3D3D3;
 }
 
-#wihdtmhahh .gt_sourcenote {
+#qstejlvbnp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -779,63 +1101,63 @@ Caused by warning in `mean.default()`:
   padding-right: 5px;
 }
 
-#wihdtmhahh .gt_left {
+#qstejlvbnp .gt_left {
   text-align: left;
 }
 
-#wihdtmhahh .gt_center {
+#qstejlvbnp .gt_center {
   text-align: center;
 }
 
-#wihdtmhahh .gt_right {
+#qstejlvbnp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wihdtmhahh .gt_font_normal {
+#qstejlvbnp .gt_font_normal {
   font-weight: normal;
 }
 
-#wihdtmhahh .gt_font_bold {
+#qstejlvbnp .gt_font_bold {
   font-weight: bold;
 }
 
-#wihdtmhahh .gt_font_italic {
+#qstejlvbnp .gt_font_italic {
   font-style: italic;
 }
 
-#wihdtmhahh .gt_super {
+#qstejlvbnp .gt_super {
   font-size: 65%;
 }
 
-#wihdtmhahh .gt_footnote_marks {
+#qstejlvbnp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wihdtmhahh .gt_asterisk {
+#qstejlvbnp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wihdtmhahh .gt_indent_1 {
+#qstejlvbnp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wihdtmhahh .gt_indent_2 {
+#qstejlvbnp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wihdtmhahh .gt_indent_3 {
+#qstejlvbnp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wihdtmhahh .gt_indent_4 {
+#qstejlvbnp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wihdtmhahh .gt_indent_5 {
+#qstejlvbnp .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -859,61 +1181,61 @@ Caused by warning in `mean.default()`:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">343</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>p_parts <span class="ot">&lt;-</span> rt.s.filt <span class="sc">|&gt;</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Hash, expect) <span class="sc">|&gt;</span> </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>expect, <span class="at">y=</span>RT, <span class="at">color =</span> expect)) <span class="sc">+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> .<span class="dv">1</span>, <span class="at">alpha =</span> .<span class="dv">8</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun =</span> mean, </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Condition"</span>, <span class="at">y =</span> <span class="st">"Reading Time (msec)"</span>) <span class="sc">+</span> </span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">343</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>p_parts <span class="ot">&lt;-</span> df_rt_filtered <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Hash, expect) <span class="sc">|&gt;</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>expect, <span class="at">y=</span>RT, <span class="at">color =</span> expect)) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> .<span class="dv">1</span>, <span class="at">alpha =</span> .<span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun =</span> mean, </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Condition"</span>, <span class="at">y =</span> <span class="st">"Reading Time (msec)"</span>) <span class="sc">+</span> </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'Hash'. You can override using the
 `.groups` argument.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p_parts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p_parts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="plotly html-widget html-fill-item" id="htmlwidget-1a917b17d725193e4a21" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-1a917b17d725193e4a21">{"x":{"data":[{"x":[0.91575397984124718,0.92132265279069547,0.93784586084075272,0.94157001310959454,0.94025416607037182,1.0463794179726391,1.0095112446229906,0.94467484252527356,1.0311780399177224,1.0682833742350339,0.90130386119708417,0.90579319265671077,1.0649882431142033,0.95469679017551246,0.91640584161505101,0.95068583986721933,1.0705861032474786,0.91394252227619288,0.98503991682082415,1.0954213629476726,0.95914692706428473,1.0286172210704536,0.94486385048367083,0.91804556595161557,0.93130558542907238,0.98819031650200484,0.97319723977707329,0.94469222524203356,1.0770506862550975,1.0729095390532166,1.0269572294782847,1.0087336726021021,0.91777497651055451,1.019579985877499,1.0213407588656991,0.92271902472712097],"y":[759.91847894727891,628.8767061487406,797.86641837246884,604.9731328462484,608.02681667631873,750.65709123416309,557.38772845446738,670.45409043323252,640.17034960493447,613.31295951126549,683.6373461039417,691.53816744250128,621.08047334859145,647.64971670689999,529.06724347612817,594.00482038165444,606.86989123409592,561.45312366998962,578.00619892736256,702.15756023864265,632.67534208342499,661.55814806139097,1071.4092718871123,893.35107064740043,613.98998547478379,721.92248408433989,662.83750175742432,517.79730096477078,496.03606748359277,932.01843492765647,645.07702160488816,557.00734097893701,660.64762844752954,737.31223864342087,694.11117993150833,851.22660612309187],"text":["expect: expected<br />RT:  759.9231<br />expect: expected","expect: expected<br />RT:  628.7692<br />expect: expected","expect: expected<br />RT:  797.7949<br />expect: expected","expect: expected<br />RT:  605.1282<br />expect: expected","expect: expected<br />RT:  608.1026<br />expect: expected","expect: expected<br />RT:  750.6154<br />expect: expected","expect: expected<br />RT:  557.4103<br />expect: expected","expect: expected<br />RT:  670.5250<br />expect: expected","expect: expected<br />RT:  640.3250<br />expect: expected","expect: expected<br />RT:  613.3590<br />expect: expected","expect: expected<br />RT:  683.6410<br />expect: expected","expect: expected<br />RT:  691.7179<br />expect: expected","expect: expected<br />RT:  620.9750<br />expect: expected","expect: expected<br />RT:  647.8250<br />expect: expected","expect: expected<br />RT:  529.1250<br />expect: expected","expect: expected<br />RT:  593.8250<br />expect: expected","expect: expected<br />RT:  606.7436<br />expect: expected","expect: expected<br />RT:  561.3077<br />expect: expected","expect: expected<br />RT:  578.0769<br />expect: expected","expect: expected<br />RT:  702.0000<br />expect: expected","expect: expected<br />RT:  632.7692<br />expect: expected","expect: expected<br />RT:  661.7750<br />expect: expected","expect: expected<br />RT: 1071.3500<br />expect: expected","expect: expected<br />RT:  893.5641<br />expect: expected","expect: expected<br />RT:  613.9487<br />expect: expected","expect: expected<br />RT:  722.0750<br />expect: expected","expect: expected<br />RT:  662.7250<br />expect: expected","expect: expected<br />RT:  517.7750<br />expect: expected","expect: expected<br />RT:  496.0000<br />expect: expected","expect: expected<br />RT:  932.1795<br />expect: expected","expect: expected<br />RT:  645.1500<br />expect: expected","expect: expected<br />RT:  556.8462<br />expect: expected","expect: expected<br />RT:  660.6154<br />expect: expected","expect: expected<br />RT:  737.1000<br />expect: expected","expect: expected<br />RT:  693.9250<br />expect: expected","expect: expected<br />RT:  851.2051<br />expect: expected"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.80000000000000004,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"expected","legendgroup":"expected","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1.9714796005282551,2.093307547736913,1.9372081003617496,2.0452825020533054,2.0013200029265135,2.049121517408639,2.0610717552248388,2.0627160424366595,2.0583784654270856,1.9627136750146748,2.0050618897192178,2.023700934648514,1.9089974925853312,2.0386507991235705,2.0053707127459348,2.0155558838043364,1.9864212855231016,2.0607992389239369,2.063255147682503,2.0487674269359557,2.0723587869200855,1.9864769334439187,2.0661893276497723,1.9430704743601381,1.9826894578058272,2.0436342750210317,2.0603539736475796,2.0747573000844568,2.0257526156492531,2.0675860490184279,1.9127623680047692,2.0870779827702792,1.9351547506637872,1.9833555503748357,2.074978677323088,1.9870740409940482],"y":[699.24928934242575,682.12920841573737,1024.5870103714149,639.2557059695107,625.90711799444637,777.64654651242301,590.14000814680014,708.12252004921345,646.88261360483307,598.10401448488233,763.32770493978637,717.22295248896808,633.61361283886311,671.43144840347634,533.80730678841542,581.51962790986579,615.99305595800274,555.76564126900405,582.57745235504581,742.09858968535468,663.47262381166217,707.06999661759471,1278.3059580816155,1097.9183613835462,729.59768324434754,686.26671069987913,758.31258077446682,564.18713056207946,531.90028261115742,1192.5052915890421,601.2701971336337,528.64983428488495,636.12463841206397,753.8870124095065,695.18885043167336,981.26671101431361],"text":["expect: unexpected<br />RT:  699.1750<br />expect: unexpected","expect: unexpected<br />RT:  682.0750<br />expect: unexpected","expect: unexpected<br />RT: 1024.4750<br />expect: unexpected","expect: unexpected<br />RT:  639.3250<br />expect: unexpected","expect: unexpected<br />RT:  626.0750<br />expect: unexpected","expect: unexpected<br />RT:  777.5000<br />expect: unexpected","expect: unexpected<br />RT:  589.9500<br />expect: unexpected","expect: unexpected<br />RT:  707.9744<br />expect: unexpected","expect: unexpected<br />RT:  646.7692<br />expect: unexpected","expect: unexpected<br />RT:  597.9750<br />expect: unexpected","expect: unexpected<br />RT:  763.2500<br />expect: unexpected","expect: unexpected<br />RT:  717.2750<br />expect: unexpected","expect: unexpected<br />RT:  633.7692<br />expect: unexpected","expect: unexpected<br />RT:  671.5128<br />expect: unexpected","expect: unexpected<br />RT:  533.7692<br />expect: unexpected","expect: unexpected<br />RT:  581.5128<br />expect: unexpected","expect: unexpected<br />RT:  615.9000<br />expect: unexpected","expect: unexpected<br />RT:  555.8500<br />expect: unexpected","expect: unexpected<br />RT:  582.7500<br />expect: unexpected","expect: unexpected<br />RT:  742.2564<br />expect: unexpected","expect: unexpected<br />RT:  663.5500<br />expect: unexpected","expect: unexpected<br />RT:  707.0000<br />expect: unexpected","expect: unexpected<br />RT: 1278.2821<br />expect: unexpected","expect: unexpected<br />RT: 1098.0000<br />expect: unexpected","expect: unexpected<br />RT:  729.8000<br />expect: unexpected","expect: unexpected<br />RT:  686.4615<br />expect: unexpected","expect: unexpected<br />RT:  758.3333<br />expect: unexpected","expect: unexpected<br />RT:  564.3333<br />expect: unexpected","expect: unexpected<br />RT:  531.7436<br />expect: unexpected","expect: unexpected<br />RT: 1192.7250<br />expect: unexpected","expect: unexpected<br />RT:  601.4359<br />expect: unexpected","expect: unexpected<br />RT:  528.5750<br />expect: unexpected","expect: unexpected<br />RT:  636.0750<br />expect: unexpected","expect: unexpected<br />RT:  754.1026<br />expect: unexpected","expect: unexpected<br />RT:  695.2051<br />expect: unexpected","expect: unexpected<br />RT:  981.4000<br />expect: unexpected"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.80000000000000004,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"unexpected","legendgroup":"unexpected","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2],"y":[672.11647079772081,716.56004273504277],"text":["expect: expected<br />RT: 672.1165<br />expect: blue","expect: unexpected<br />RT: 716.5600<br />expect: blue"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,255,1)","opacity":1,"size":15.118110236220474,"symbol":"x-thin-open","line":{"width":1.8897637795275593,"color":"rgba(0,0,255,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283108,"r":7.3059360730593621,"b":40.182648401826498,"l":48.949771689497723},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,2.6000000000000001],"tickmode":"array","ticktext":["expected","unexpected"],"tickvals":[1,2],"categoryorder":"array","categoryarray":["expected","unexpected"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Condition","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[456.92257295369166,1317.4194526115166],"tickmode":"array","ticktext":["500","700","900","1100","1300"],"tickvals":[500,700,900,1100,1300],"categoryorder":"array","categoryarray":["500","700","900","1100","1300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Reading Time (msec)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"expect","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"167cc539f3f4c":{"x":{},"y":{},"colour":{},"type":"scatter"},"167cc7bf4c177":{"x":{},"y":{},"colour":{}}},"cur_data":"167cc539f3f4c","visdat":{"167cc539f3f4c":["function (y) ","x"],"167cc7bf4c177":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1a917b17d725193e4a21">{"x":{"data":[{"x":[0.91575397984124718,0.92132265279069547,0.93784586084075272,0.94157001310959454,0.94025416607037182,1.0463794179726391,1.0095112446229906,0.94467484252527356,1.0311780399177224,1.0682833742350339,0.90130386119708417,0.90579319265671077,1.0649882431142033,0.95469679017551246,0.91640584161505101,0.95068583986721933,1.0705861032474786,0.91394252227619288,0.98503991682082415,1.0954213629476726,0.95914692706428473,1.0286172210704536,0.94486385048367083,0.91804556595161557,0.93130558542907238,0.98819031650200484,0.97319723977707329,0.94469222524203356,1.0770506862550975,1.0729095390532166,1.0269572294782847,1.0087336726021021,0.91777497651055451,1.019579985877499,1.0213407588656991,0.92271902472712097],"y":[759.91847894727891,628.8767061487406,797.86641837246884,604.9731328462484,608.02681667631873,750.65709123416309,557.38772845446738,670.45409043323252,640.17034960493447,613.31295951126549,683.6373461039417,691.53816744250128,621.08047334859145,647.64971670689999,529.06724347612817,594.00482038165444,606.86989123409592,561.45312366998962,578.00619892736256,702.15756023864265,632.67534208342499,661.55814806139097,1071.4092718871123,893.35107064740043,613.98998547478379,721.92248408433989,662.83750175742432,517.79730096477078,496.03606748359277,932.01843492765647,645.07702160488816,557.00734097893701,660.64762844752954,737.31223864342087,694.11117993150833,851.22660612309187],"text":["expect: expected<br />RT:  759.9231<br />expect: expected","expect: expected<br />RT:  628.7692<br />expect: expected","expect: expected<br />RT:  797.7949<br />expect: expected","expect: expected<br />RT:  605.1282<br />expect: expected","expect: expected<br />RT:  608.1026<br />expect: expected","expect: expected<br />RT:  750.6154<br />expect: expected","expect: expected<br />RT:  557.4103<br />expect: expected","expect: expected<br />RT:  670.5250<br />expect: expected","expect: expected<br />RT:  640.3250<br />expect: expected","expect: expected<br />RT:  613.3590<br />expect: expected","expect: expected<br />RT:  683.6410<br />expect: expected","expect: expected<br />RT:  691.7179<br />expect: expected","expect: expected<br />RT:  620.9750<br />expect: expected","expect: expected<br />RT:  647.8250<br />expect: expected","expect: expected<br />RT:  529.1250<br />expect: expected","expect: expected<br />RT:  593.8250<br />expect: expected","expect: expected<br />RT:  606.7436<br />expect: expected","expect: expected<br />RT:  561.3077<br />expect: expected","expect: expected<br />RT:  578.0769<br />expect: expected","expect: expected<br />RT:  702.0000<br />expect: expected","expect: expected<br />RT:  632.7692<br />expect: expected","expect: expected<br />RT:  661.7750<br />expect: expected","expect: expected<br />RT: 1071.3500<br />expect: expected","expect: expected<br />RT:  893.5641<br />expect: expected","expect: expected<br />RT:  613.9487<br />expect: expected","expect: expected<br />RT:  722.0750<br />expect: expected","expect: expected<br />RT:  662.7250<br />expect: expected","expect: expected<br />RT:  517.7750<br />expect: expected","expect: expected<br />RT:  496.0000<br />expect: expected","expect: expected<br />RT:  932.1795<br />expect: expected","expect: expected<br />RT:  645.1500<br />expect: expected","expect: expected<br />RT:  556.8462<br />expect: expected","expect: expected<br />RT:  660.6154<br />expect: expected","expect: expected<br />RT:  737.1000<br />expect: expected","expect: expected<br />RT:  693.9250<br />expect: expected","expect: expected<br />RT:  851.2051<br />expect: expected"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":0.80000000000000004,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"expected","legendgroup":"expected","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1.9714796005282551,2.093307547736913,1.9372081003617496,2.0452825020533054,2.0013200029265135,2.049121517408639,2.0610717552248388,2.0627160424366595,2.0583784654270856,1.9627136750146748,2.0050618897192178,2.023700934648514,1.9089974925853312,2.0386507991235705,2.0053707127459348,2.0155558838043364,1.9864212855231016,2.0607992389239369,2.063255147682503,2.0487674269359557,2.0723587869200855,1.9864769334439187,2.0661893276497723,1.9430704743601381,1.9826894578058272,2.0436342750210317,2.0603539736475796,2.0747573000844568,2.0257526156492531,2.0675860490184279,1.9127623680047692,2.0870779827702792,1.9351547506637872,1.9833555503748357,2.074978677323088,1.9870740409940482],"y":[699.24928934242575,682.12920841573737,1024.5870103714149,639.2557059695107,625.90711799444637,777.64654651242301,590.14000814680014,708.12252004921345,646.88261360483307,598.10401448488233,763.32770493978637,717.22295248896808,633.61361283886311,671.43144840347634,533.80730678841542,581.51962790986579,615.99305595800274,555.76564126900405,582.57745235504581,742.09858968535468,663.47262381166217,707.06999661759471,1278.3059580816155,1097.9183613835462,729.59768324434754,686.26671069987913,758.31258077446682,564.18713056207946,531.90028261115742,1192.5052915890421,601.2701971336337,528.64983428488495,636.12463841206397,753.8870124095065,695.18885043167336,981.26671101431361],"text":["expect: unexpected<br />RT:  699.1750<br />expect: unexpected","expect: unexpected<br />RT:  682.0750<br />expect: unexpected","expect: unexpected<br />RT: 1024.4750<br />expect: unexpected","expect: unexpected<br />RT:  639.3250<br />expect: unexpected","expect: unexpected<br />RT:  626.0750<br />expect: unexpected","expect: unexpected<br />RT:  777.5000<br />expect: unexpected","expect: unexpected<br />RT:  589.9500<br />expect: unexpected","expect: unexpected<br />RT:  707.9744<br />expect: unexpected","expect: unexpected<br />RT:  646.7692<br />expect: unexpected","expect: unexpected<br />RT:  597.9750<br />expect: unexpected","expect: unexpected<br />RT:  763.2500<br />expect: unexpected","expect: unexpected<br />RT:  717.2750<br />expect: unexpected","expect: unexpected<br />RT:  633.7692<br />expect: unexpected","expect: unexpected<br />RT:  671.5128<br />expect: unexpected","expect: unexpected<br />RT:  533.7692<br />expect: unexpected","expect: unexpected<br />RT:  581.5128<br />expect: unexpected","expect: unexpected<br />RT:  615.9000<br />expect: unexpected","expect: unexpected<br />RT:  555.8500<br />expect: unexpected","expect: unexpected<br />RT:  582.7500<br />expect: unexpected","expect: unexpected<br />RT:  742.2564<br />expect: unexpected","expect: unexpected<br />RT:  663.5500<br />expect: unexpected","expect: unexpected<br />RT:  707.0000<br />expect: unexpected","expect: unexpected<br />RT: 1278.2821<br />expect: unexpected","expect: unexpected<br />RT: 1098.0000<br />expect: unexpected","expect: unexpected<br />RT:  729.8000<br />expect: unexpected","expect: unexpected<br />RT:  686.4615<br />expect: unexpected","expect: unexpected<br />RT:  758.3333<br />expect: unexpected","expect: unexpected<br />RT:  564.3333<br />expect: unexpected","expect: unexpected<br />RT:  531.7436<br />expect: unexpected","expect: unexpected<br />RT: 1192.7250<br />expect: unexpected","expect: unexpected<br />RT:  601.4359<br />expect: unexpected","expect: unexpected<br />RT:  528.5750<br />expect: unexpected","expect: unexpected<br />RT:  636.0750<br />expect: unexpected","expect: unexpected<br />RT:  754.1026<br />expect: unexpected","expect: unexpected<br />RT:  695.2051<br />expect: unexpected","expect: unexpected<br />RT:  981.4000<br />expect: unexpected"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":0.80000000000000004,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"unexpected","legendgroup":"unexpected","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2],"y":[672.11647079772081,716.56004273504277],"text":["expect: expected<br />RT: 672.1165<br />expect: blue","expect: unexpected<br />RT: 716.5600<br />expect: blue"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,255,1)","opacity":1,"size":15.118110236220474,"symbol":"x-thin-open","line":{"width":1.8897637795275593,"color":"rgba(0,0,255,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283108,"r":7.3059360730593621,"b":40.182648401826498,"l":48.949771689497723},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,2.6000000000000001],"tickmode":"array","ticktext":["expected","unexpected"],"tickvals":[1,2],"categoryorder":"array","categoryarray":["expected","unexpected"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Condition","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[456.92257295369166,1317.4194526115166],"tickmode":"array","ticktext":["500","700","900","1100","1300"],"tickvals":[500,700,900,1100,1300],"categoryorder":"array","categoryarray":["500","700","900","1100","1300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Reading Time (msec)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"expect","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"16fb16ada965d":{"x":{},"y":{},"colour":{},"type":"scatter"},"16fb134c5ea79":{"x":{},"y":{},"colour":{}}},"cur_data":"16fb16ada965d","visdat":{"16fb16ada965d":["function (y) ","x"],"16fb134c5ea79":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rt.s.filt <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Hash, expect) <span class="sc">|&gt;</span> </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>expect, <span class="at">y=</span>RT, <span class="at">shape =</span> expect, <span class="at">group =</span> Hash, <span class="at">color =</span> Hash)) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> .<span class="dv">8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Condition"</span>, <span class="at">y =</span> <span class="st">"Reading Time (msec)"</span>) <span class="sc">+</span> </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_rt_filtered <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rgn.fix <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Hash, expect) <span class="sc">|&gt;</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">RT =</span> <span class="fu">mean</span>(RT, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>expect, <span class="at">y=</span>RT, <span class="at">shape =</span> expect, <span class="at">group =</span> Hash, <span class="at">color =</span> Hash)) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> .<span class="dv">8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Condition"</span>, <span class="at">y =</span> <span class="st">"Reading Time (msec)"</span>) <span class="sc">+</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'Hash'. You can override using the
 `.groups` argument.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="Homework-5_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="Homework-5_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 <section id="inferential-statistics" class="level2">
 <h2 class="anchored" data-anchor-id="inferential-statistics">Inferential Statistics</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4) <span class="co"># package for linear mixed effects</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest) <span class="co"># package for p-values from lme4 models</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4) <span class="co"># package for linear mixed effects</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest) <span class="co"># package for p-values from lme4 models</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>m_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(RT <span class="sc">~</span> expect, </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> <span class="fu">filter</span>(rt.s.filt, rgn.fix <span class="sc">==</span> <span class="dv">0</span>))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>m_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(RT <span class="sc">~</span> expect, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> <span class="fu">filter</span>(df_rt_filtered, rgn.fix <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = RT ~ expect, data = filter(rt.s.filt, rgn.fix == 
+lm(formula = RT ~ expect, data = filter(df_rt_filtered, rgn.fix == 
     0))
 
 Residuals:
@@ -933,7 +1255,7 @@ F-statistic: 17.06 on 1 and 2842 DF,  p-value: 3.723e-05</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(m_lm, <span class="at">conf.int =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(m_lm, <span class="at">conf.int =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div id="rxxfzkbtna" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1402,13 +1724,13 @@ F-statistic: 17.06 on 1 and 2842 DF,  p-value: 3.723e-05</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>m_noun <span class="ot">&lt;-</span> <span class="fu">lmer</span>(RT <span class="sc">~</span> expect <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Hash) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> expect <span class="sc">|</span> item), </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> <span class="fu">filter</span>(rt.s.filt, rgn.fix <span class="sc">==</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>m_noun <span class="ot">&lt;-</span> <span class="fu">lmer</span>(RT <span class="sc">~</span> expect <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Hash) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> expect <span class="sc">|</span> item), </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> <span class="fu">filter</span>(df_rt_filtered, rgn.fix <span class="sc">==</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
 Model failed to converge with max|grad| = 0.00233389 (tol = 0.002, component 1)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(m_noun, <span class="at">conf.int =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(m_noun, <span class="at">conf.int =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div id="mdzecaljnt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">

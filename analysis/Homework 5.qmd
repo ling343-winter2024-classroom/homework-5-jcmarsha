@@ -20,6 +20,7 @@ library(broom)
 library(emmeans)
 library(logistf)
 library(cowplot)
+library(kableExtra)
 ```
 
 ## **Predictive Processing in Language Comprehension: An Examination of the a/an Article Contrast**
