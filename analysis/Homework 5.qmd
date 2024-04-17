@@ -23,8 +23,6 @@ library(cowplot)
 library(kableExtra)
 ```
 
-## **Predictive Processing in Language Comprehension: An Examination of the a/an Article Contrast**
-
 ## **Introduction**
 
 In the field of psycholinguistics, the concept of predictive processing---anticipating upcoming words and structures during language comprehension---has garnered significant attention. This cognitive mechanism is believed to enhance the efficiency of language understanding by preparing the listener or reader for incoming information. Despite substantial theoretical development, empirical investigations into the nuances of this process, such as the influence of subtle linguistic cues on prediction, are relatively sparse.
@@ -85,7 +83,7 @@ While the results are promising, the study's reliance on a specific type of ling
 
 This study highlights the predictive nature of language comprehension and confirms that early syntactic cues such as articles can significantly affect processing speed. These insights contribute to our understanding of the cognitive processes underlying language comprehension and offer avenues for further research into predictive mechanisms in linguistics.
 
-## 2. Codebook/Data Dictionary
+## Codebook/Data Dictionary
 
 This section provides detailed descriptions of each variable used in the dataset for the analysis of article-noun predictability effects on comprehension times and accuracy:
 
@@ -140,11 +138,11 @@ df_rt <- df_all |>
   filter(Hash != "9dAvrH0+R6a0U5adPzZSyA")
 ```
 
-## 3. Number of Participants 
+## Number of Participants 
 
 We have data for a total of **`r length(unique(df_all$Hash))`** participants in this study. This number is derived from counting the unique hash values in the "Hash" column of the **`df_all`** dataframe, which includes all participant entries.
 
-## 4. Number of Rows Remaining After Removing Trials
+## Number of Rows Remaining After Removing Trials
 
 As part of the data analysis process, certain trials were removed to ensure the integrity and reliability of the results. The exclusions were based on specific criteria designed to eliminate outliers and incorrect responses, such as:
 
@@ -156,7 +154,7 @@ After applying these filters, the remaining data was compiled into the **`df_rt`
 
 This filtering process ensures that our analysis is based only on high-quality, representative data, allowing for more accurate conclusions about the effect of article-noun predictability on response times.
 
-## 5. Participant Age Statistics
+## Participant Age Statistics
 
 ```{r}
 library(dplyr)
@@ -188,8 +186,6 @@ print(age_summary)
 | Max       | `r age_summary$Max`  |
 | SD        | `r age_summary$SD`   |
 
-## 6. Reproduce Figure 1
-
 ```{r}
 df_rt_filtered <- readRDS("rt.s.filt")
 
@@ -215,7 +211,7 @@ ggplot(rgn.rt.raw, aes(x=rgn, y=rt, group=expect, shape=expect)) +
   theme_bw()
 ```
 
-## 7. Reproduce Table (Figure 1)
+## Table (Figure 1)
 
 ```{r}
 library(dplyr)
